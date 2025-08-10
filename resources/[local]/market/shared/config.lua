@@ -6,8 +6,8 @@ Config.Shops = {
     label = '24/7 Store',
     blip = { sprite = 52, color = 2, scale = 0.75 },
     locations = {
-      vector3(25.7, -1347.3, 29.5),
-      vector3(-48.5, -1757.5, 29.4)
+      { x = 25.7, y = -1347.3, z = 29.5 },
+      { x = -48.5, y = -1757.5, z = 29.4 }
     },
     items = {
       { name = 'water', label = 'Water', price = 5 },

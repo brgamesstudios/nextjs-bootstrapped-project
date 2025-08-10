@@ -70,6 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('message', (event) => {
   const { action, shop } = event.data || {};
   if (action === 'open') {
+    console.log('[market_ui] open payload', shop);
     setVisible(true);
     render(shop);
   } else if (action === 'update') {

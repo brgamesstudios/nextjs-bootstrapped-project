@@ -1,10 +1,20 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local function getDefaultShop()
-  if type(Config) ~= 'table' or type(Config.Shops) ~= 'table' or not Config.Shops[1] then
-    return { id = 'default', label = 'Market', items = {} }
+  local shop
+  if type(Config) == 'table' and type(Config.Shops) == 'table' and Config.Shops[1] then
+    shop = Config.Shops[1]
   end
-  local shop = Config.Shops[1]
+  if not shop then
+    shop = { id = 'default', label = 'Market', items = {} }
+  end
+  if type(shop.items) ~= 'table' or #shop.items == 0 then
+    shop.items = {
+      { name = 'water', label = 'Water', price = 5 },
+      { name = 'sandwich', label = 'Sandwich', price = 10 },
+      { name = 'phone', label = 'Phone', price = 250 }
+    }
+  end
   return shop
 end
 
@@ -14,19 +24,25 @@ local function serializeShop(shop)
   for _, it in ipairs(shop.items or {}) do
     items[#items + 1] = { name = it.name, label = it.label, price = it.price }
   end
-  return {
+  local payload = {
     id = shop.id,
     label = shop.label,
     currency = (Config and Config.Currency) or '$',
     items = items
   }
+  print(('[market_ui] serializeShop -> id=%s label=%s items=%d'):format(payload.id or 'nil', payload.label or 'nil', #payload.items))
+  return payload
 end
 
 RegisterServerEvent('market_ui:getShop')
 AddEventHandler('market_ui:getShop', function()
   local src = source
   local shop = getDefaultShop()
-  TriggerClientEvent('market_ui:open', src, serializeShop(shop))
+  local payload = serializeShop(shop)
+  if not payload or #payload.items == 0 then
+    print('[market_ui] Warning: shop has no items. Check shared/config.lua -> Config.Shops[1].items')
+  end
+  TriggerClientEvent('market_ui:open', src, payload)
 end)
 
 local function notify(src, message, ntype)
