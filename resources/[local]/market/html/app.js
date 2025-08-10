@@ -2,11 +2,24 @@ const appEl = document.getElementById('app');
 const itemsEl = document.getElementById('items');
 const shopLabelEl = document.getElementById('shopLabel');
 const closeBtn = document.getElementById('close');
+const searchInput = document.getElementById('search');
 
 let currentShop = null;
+let currentQuery = '';
 
 function setVisible(visible) {
   appEl.classList.toggle('hidden', !visible);
+}
+
+function normalize(text) {
+  return String(text || '').toLowerCase();
+}
+
+function filteredItems() {
+  const all = currentShop?.items || [];
+  if (!currentQuery) return all;
+  const q = normalize(currentQuery);
+  return all.filter(it => normalize(it.label).includes(q) || normalize(it.name).includes(q));
 }
 
 function render(shop) {
@@ -14,7 +27,7 @@ function render(shop) {
   shopLabelEl.textContent = currentShop?.label || 'Shop';
   const currency = currentShop?.currency || '$';
   itemsEl.innerHTML = '';
-  (currentShop?.items || []).forEach(item => {
+  filteredItems().forEach(item => {
     const card = document.createElement('div');
     card.className = 'card';
 
@@ -88,4 +101,9 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     fetch(`https://${GetParentResourceName()}/close`, { method: 'POST' });
   }
+});
+
+searchInput?.addEventListener('input', (e) => {
+  currentQuery = e.target.value || '';
+  render();
 });
