@@ -63,6 +63,10 @@ function render(shop) {
   });
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+  setVisible(false);
+});
+
 window.addEventListener('message', (event) => {
   const { action, shop } = event.data || {};
   if (action === 'open') {

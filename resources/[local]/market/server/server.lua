@@ -22,19 +22,19 @@ local function serializeShop(shop)
   }
 end
 
-RegisterServerEvent('market:getShop')
-AddEventHandler('market:getShop', function()
+RegisterServerEvent('market_ui:getShop')
+AddEventHandler('market_ui:getShop', function()
   local src = source
   local shop = getDefaultShop()
-  TriggerClientEvent('market:open', src, serializeShop(shop))
+  TriggerClientEvent('market_ui:open', src, serializeShop(shop))
 end)
 
 local function notify(src, message, ntype)
   TriggerClientEvent('QBCore:Notify', src, message, ntype or 'primary')
 end
 
-RegisterServerEvent('market:buyItem')
-AddEventHandler('market:buyItem', function(itemName, quantity)
+RegisterServerEvent('market_ui:buyItem')
+AddEventHandler('market_ui:buyItem', function(itemName, quantity)
   local src = source
   local Player = QBCore.Functions.GetPlayer(src)
   quantity = tonumber(quantity) or 1
