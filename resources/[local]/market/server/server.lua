@@ -1,6 +1,9 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local function getDefaultShop()
+  if type(Config) ~= 'table' or type(Config.Shops) ~= 'table' or not Config.Shops[1] then
+    return { id = 'default', label = 'Market', items = {} }
+  end
   local shop = Config.Shops[1]
   return shop
 end
@@ -14,7 +17,7 @@ local function serializeShop(shop)
   return {
     id = shop.id,
     label = shop.label,
-    currency = Config.Currency or '$',
+    currency = (Config and Config.Currency) or '$',
     items = items
   }
 end
@@ -57,7 +60,7 @@ AddEventHandler('market:buyItem', function(itemName, quantity)
     Player.Functions.RemoveMoney('cash', totalPrice, ('market_purchase:%s x%d'):format(itemName, quantity))
     local added = Player.Functions.AddItem(itemName, quantity)
     if added then
-      notify(src, ('%s x%d satin alindi (%s%d)'):format(itemData.label, quantity, Config.Currency or '$', totalPrice), 'success')
+      notify(src, ('%s x%d satin alindi (%s%d)'):format(itemData.label, quantity, (Config and Config.Currency) or '$', totalPrice), 'success')
     else
       Player.Functions.AddMoney('cash', totalPrice, ('market_refund:%s x%d'):format(itemName, quantity))
       notify(src, 'Envanter dolu', 'error')

@@ -23,10 +23,12 @@ shared_scripts {
 }
 
 client_scripts {
+  'shared/config.lua',
   'client/client.lua'
 }
 
 server_scripts {
+  'shared/config.lua',
   'server/server.lua'
 }
 
