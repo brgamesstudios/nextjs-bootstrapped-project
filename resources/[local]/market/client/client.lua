@@ -36,6 +36,14 @@ function ToggleMarket(shouldOpen)
   end
 end
 
+-- Ensure UI is closed when the resource starts
+AddEventHandler('onClientResourceStart', function(resName)
+  if resName ~= GetCurrentResourceName() then return end
+  SendNUIMessage({ action = 'close' })
+  SetNuiFocus(false, false)
+  isUiOpen = false
+end)
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
