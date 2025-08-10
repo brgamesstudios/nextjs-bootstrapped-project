@@ -3,6 +3,7 @@ const itemsEl = document.getElementById('items');
 const shopLabelEl = document.getElementById('shopLabel');
 const closeBtn = document.getElementById('close');
 const searchInput = document.getElementById('search');
+const searchBtn = document.getElementById('searchBtn');
 
 let currentShop = null;
 let currentQuery = '';
@@ -106,4 +107,14 @@ window.addEventListener('keydown', (e) => {
 searchInput?.addEventListener('input', (e) => {
   currentQuery = e.target.value || '';
   render();
+});
+
+searchBtn?.addEventListener('click', () => {
+  if (!searchInput) return;
+  if (currentQuery) {
+    currentQuery = '';
+    searchInput.value = '';
+    render();
+  }
+  searchInput.focus();
 });
