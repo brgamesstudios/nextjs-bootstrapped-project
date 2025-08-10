@@ -1,5 +1,4 @@
-local ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+local QBCore = exports['qb-core']:GetCoreObject()
 
 local function getDefaultShop()
   local shop = Config.Shops[1]
@@ -23,16 +22,18 @@ end
 RegisterServerEvent('market:getShop')
 AddEventHandler('market:getShop', function()
   local src = source
-  local xPlayer = ESX and ESX.GetPlayerFromId(src) or nil
   local shop = getDefaultShop()
-
   TriggerClientEvent('market:open', src, serializeShop(shop))
 end)
+
+local function notify(src, message, ntype)
+  TriggerClientEvent('QBCore:Notify', src, message, ntype or 'primary')
+end
 
 RegisterServerEvent('market:buyItem')
 AddEventHandler('market:buyItem', function(itemName, quantity)
   local src = source
-  local xPlayer = ESX and ESX.GetPlayerFromId(src) or nil
+  local Player = QBCore.Functions.GetPlayer(src)
   quantity = tonumber(quantity) or 1
 
   local shop = getDefaultShop()
@@ -44,18 +45,24 @@ AddEventHandler('market:buyItem', function(itemName, quantity)
     end
   end
   if not itemData then return end
+  if not Player then
+    print(('Player %d attempted purchase but QBCore player not found'):format(src))
+    return
+  end
 
   local totalPrice = itemData.price * quantity
+  local cash = Player.Functions.GetMoney('cash')
 
-  if xPlayer then
-    if xPlayer.getMoney() >= totalPrice then
-      xPlayer.removeMoney(totalPrice)
-      xPlayer.addInventoryItem(itemName, quantity)
-      TriggerClientEvent('esx:showNotification', src, ('Purchased %s x%d for %s%d'):format(itemData.label, quantity, Config.Currency, totalPrice))
+  if cash >= totalPrice then
+    Player.Functions.RemoveMoney('cash', totalPrice, ('market_purchase:%s x%d'):format(itemName, quantity))
+    local added = Player.Functions.AddItem(itemName, quantity)
+    if added then
+      notify(src, ('%s x%d satin alindi (%s%d)'):format(itemData.label, quantity, Config.Currency or '$', totalPrice), 'success')
     else
-      TriggerClientEvent('esx:showNotification', src, 'Not enough money')
+      Player.Functions.AddMoney('cash', totalPrice, ('market_refund:%s x%d'):format(itemName, quantity))
+      notify(src, 'Envanter dolu', 'error')
     end
   else
-    print(('Player %d bought %s x%d for %d (no framework bound)'):format(src, itemName, quantity, totalPrice))
+    notify(src, 'Yetersiz bakiye', 'error')
   end
 end)

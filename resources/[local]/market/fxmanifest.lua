@@ -29,3 +29,7 @@ client_scripts {
 server_scripts {
   'server/server.lua'
 }
+
+dependencies {
+  'qb-core'
+}
