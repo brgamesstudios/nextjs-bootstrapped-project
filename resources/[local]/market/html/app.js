@@ -8,6 +8,12 @@ const searchBtn = document.getElementById('searchBtn');
 let currentShop = null;
 let currentQuery = '';
 
+const imageMap = {
+  water: 'images/water.svg',
+  sandwich: 'images/sandwich.svg',
+  phone: 'images/phone.svg'
+};
+
 function setVisible(visible) {
   appEl.classList.toggle('hidden', !visible);
 }
@@ -23,6 +29,11 @@ function filteredItems() {
   return all.filter(it => normalize(it.label).includes(q) || normalize(it.name).includes(q));
 }
 
+function getImageSrc(item) {
+  const byName = imageMap[item.name];
+  return byName || 'images/placeholder.svg';
+}
+
 function render(shop) {
   currentShop = shop || currentShop;
   shopLabelEl.textContent = currentShop?.label || 'Shop';
@@ -31,6 +42,13 @@ function render(shop) {
   filteredItems().forEach(item => {
     const card = document.createElement('div');
     card.className = 'card';
+
+    const thumb = document.createElement('img');
+    thumb.className = 'thumb';
+    thumb.src = getImageSrc(item);
+    thumb.alt = item.label;
+    thumb.width = 40;
+    thumb.height = 40;
 
     const info = document.createElement('div');
     info.className = 'info';
@@ -70,6 +88,7 @@ function render(shop) {
     qtyWrap.appendChild(qtyInput);
     qtyWrap.appendChild(buyBtn);
 
+    card.appendChild(thumb);
     card.appendChild(info);
     card.appendChild(qtyWrap);
 

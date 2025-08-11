@@ -15,7 +15,8 @@ files {
   'html/index.html',
   'html/style.css',
   'html/app.js',
-  'html/reset.css'
+  'html/reset.css',
+  'html/images/*.svg'
 }
 
 shared_scripts {
