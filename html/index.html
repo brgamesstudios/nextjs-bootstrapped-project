@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Script UI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Main UI Container -->
+        <div id="ui-container" class="hidden">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-cog"></i> Base Script</h1>
+                <button id="close-btn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Player Info -->
+                <div class="section">
+                    <h2><i class="fas fa-user"></i> Player Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Name:</span>
+                            <span id="player-name" class="value">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Money:</span>
+                            <span id="player-money" class="value">$0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Bank:</span>
+                            <span id="player-bank" class="value">$0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Health:</span>
+                            <span id="player-health" class="value">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="section">
+                    <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    <div class="action-grid">
+                        <button class="action-btn" data-action="test">
+                            <i class="fas fa-play"></i>
+                            Test Command
+                        </button>
+                        <button class="action-btn" data-action="money">
+                            <i class="fas fa-dollar-sign"></i>
+                            Check Money
+                        </button>
+                        <button class="action-btn" data-action="coords">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Get Coords
+                        </button>
+                        <button class="action-btn" data-action="help">
+                            <i class="fas fa-question-circle"></i>
+                            Help
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="section">
+                    <h2><i class="fas fa-bell"></i> Notifications</h2>
+                    <div id="notifications" class="notifications">
+                        <div class="notification info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Welcome to the Base Script!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast-container"></div>
+
+        <!-- Loading Screen -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading Base Script...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
